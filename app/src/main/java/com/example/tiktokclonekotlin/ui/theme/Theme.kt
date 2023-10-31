@@ -1,6 +1,6 @@
 package com.example.tiktokclonekotlin.ui.theme
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -56,7 +56,7 @@ fun TikTokCloneKotlinTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
+            val window = (view.context as AppCompatActivity).window
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }

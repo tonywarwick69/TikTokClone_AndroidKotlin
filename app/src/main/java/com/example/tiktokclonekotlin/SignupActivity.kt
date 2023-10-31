@@ -19,7 +19,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
-class SignupActivity : ComponentActivity() {
+class SignupActivity : AppCompatActivity() {
     lateinit var binding : ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

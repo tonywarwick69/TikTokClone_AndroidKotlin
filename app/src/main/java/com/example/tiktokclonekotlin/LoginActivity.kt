@@ -14,9 +14,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
-    lateinit var btnGoToSignupActivity: SignupActivity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -27,6 +27,11 @@ class LoginActivity : ComponentActivity() {
         }
         binding.btnSubmit.setOnClickListener{
             login()
+        }
+        //if user already login successfully then start main activity no need to do login everytime
+        FirebaseAuth.getInstance().currentUser?.let {
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
         }
     }
     fun login(){

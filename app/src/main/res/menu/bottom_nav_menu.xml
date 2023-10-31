@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Home"
+        android:icon="@drawable/home_icon"
+        android:id="@+id/bottom_menu_home"/>
+    <item android:title="Add Video"
+        android:icon="@drawable/add_icon"
+        android:id="@+id/bottom_menu_addVideo"/>
+    <item android:title="Profile"
+        android:icon="@drawable/profile_icon"
+        android:id="@+id/bottom_menu_profile"/>
+</menu>
