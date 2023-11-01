@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.example.tiktokclonekotlin.databinding.ActivityMainBinding
+import com.example.tiktokclonekotlin.util.ToastResponseMessage
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -28,6 +30,21 @@ class MainActivity : AppCompatActivity()  {
             startActivity(Intent(this,LoginActivity::class.java))
             finish()
 
+        }
+        binding.bottomNavMenu.setOnItemReselectedListener{menuItem ->
+            when(menuItem.itemId){
+                R.id.bottom_menu_home->{
+                    ToastResponseMessage.showToast(this,"HOME")
+                }
+                R.id.bottom_menu_addVideo->{
+                    startActivity(Intent(this,VideoUploadActivity::class.java))
+                    finish()
+                }
+                R.id.bottom_menu_profile->{
+                    ToastResponseMessage.showToast(this,"PROFILE")
+                }
+            }
+            false
         }
     }
 

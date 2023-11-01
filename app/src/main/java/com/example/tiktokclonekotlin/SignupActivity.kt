@@ -71,15 +71,15 @@ class SignupActivity : AppCompatActivity() {
                     val userModel = UserModel(user.uid,email,email.substringBefore("@"))
                     Firebase.firestore.collection("users")
                         .document(user.uid)
-                        .set(userModel as Map<String, Any>)
+                        .set(userModel)
                         .addOnSuccessListener    {
                                 ToastResponseMessage.showToast(applicationContext,"Account created successfully")
                                 setInProgress(false)
-                                startActivity(Intent(this@SignupActivity, MainActivity::class.java))
+                                startActivity(Intent(this, LoginActivity::class.java))
                                 finish()
                             }.addOnFailureListener{
-                            ToastResponseMessage.showToast(applicationContext,it.localizedMessage?:it.stackTraceToString())
-                            setInProgress(false)
+                            ToastResponseMessage.showToast(applicationContext,"Error unable to signup account")
+                            setInProgress(true)
 
                         }
                 }
