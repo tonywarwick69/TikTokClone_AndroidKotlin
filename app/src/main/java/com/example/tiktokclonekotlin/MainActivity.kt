@@ -7,24 +7,27 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
+import com.example.tiktokclonekotlin.adapter.VideoListAdapter
 import com.example.tiktokclonekotlin.databinding.ActivityMainBinding
+import com.example.tiktokclonekotlin.model.VideoModel
 import com.example.tiktokclonekotlin.util.ToastResponseMessage
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 
 
 class MainActivity : AppCompatActivity()  {
 //    lateinit var btnSignupActivity : Button
     lateinit var binding: ActivityMainBinding
+    lateinit var adapter: VideoListAdapter
     //btn_signOut
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        binding.btnSignOut.setOnClickListener{
-//            startActivity(Intent(this, SignupActivity::class.java))
-//            finish()
-//        }
+
         binding.btnSignOut.setOnClickListener{
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this,LoginActivity::class.java))
@@ -46,8 +49,28 @@ class MainActivity : AppCompatActivity()  {
             }
             false
         }
+        setupViewPager()
+    }
+    private fun setupViewPager(){
+        val options = FirestoreRecyclerOptions.Builder<VideoModel>()
+            .setQuery(
+                Firebase.firestore.collection("videos"),
+                VideoModel::class.java
+            ).build()
+        adapter = VideoListAdapter(options)
+        binding.viewPager.adapter = adapter
+
     }
 
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
+    }
 
 
 //    override fun onClick(v: View?) {

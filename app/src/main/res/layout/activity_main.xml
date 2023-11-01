@@ -5,15 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:orientation="vertical"
    >
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sign Out"
-        android:textSize="30sp"
-        android:layout_margin="12dp"
-        android:id="@+id/btn_signOut"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_signOut"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_margin="12dp"
+            android:text="Sign Out"
+            android:textSize="12sp" />
+    </LinearLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/bottom_nav_menu"
+        android:id="@+id/view_pager"/>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="62dp"
