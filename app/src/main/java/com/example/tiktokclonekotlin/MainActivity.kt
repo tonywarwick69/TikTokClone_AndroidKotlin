@@ -44,7 +44,8 @@ class MainActivity : AppCompatActivity()  {
                     finish()
                 }
                 R.id.bottom_menu_profile->{
-                    ToastResponseMessage.showToast(this,"PROFILE")
+                    startActivity(Intent(this,ProfileActivity::class.java))
+                    finish()
                 }
             }
             false

@@ -4,10 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.tiktokclonekotlin.R
 import com.example.tiktokclonekotlin.databinding.VideoItemRowBinding
+import com.example.tiktokclonekotlin.model.UserModel
 import com.example.tiktokclonekotlin.model.VideoModel
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 class VideoListAdapter( options : FirestoreRecyclerOptions<VideoModel>
 ): FirestoreRecyclerAdapter<VideoModel,VideoListAdapter.VideoViewHolder>(options )
@@ -15,7 +21,30 @@ class VideoListAdapter( options : FirestoreRecyclerOptions<VideoModel>
 
     inner class VideoViewHolder(private val binding: VideoItemRowBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindVideo(videoModel: VideoModel){
+            //bindUserData get user data from VideoModel contain uploaderId
+            Firebase.firestore.collection("users")
+                .document(videoModel.uploaderID)
+                .get().addOnSuccessListener{
+                    val userModel = it?.toObject(UserModel::class.java)
+                    userModel?.apply {
+                        binding.usernameView.text = username
+                        //bind profile pic
+                        val requestOptions = RequestOptions.placeholderOf(R.drawable.profile_icon)
+                            .circleCrop()
+
+                        Glide.with(binding.profileIcon)
+                            .load(profilePic)
+                            .apply(requestOptions)
+                            .into(binding.profileIcon)
+                    }
+                }
+
+            binding.captionView.text = videoModel.title
+            binding.progressBar.visibility = View.VISIBLE
+
+            //bind video
             binding.videoView.apply {
+                binding.progressBar.visibility = View.GONE
                 setVideoPath(videoModel.url)
                 setOnPreparedListener {
                     it.start()

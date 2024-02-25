@@ -37,6 +37,7 @@ class VideoUploadActivity : AppCompatActivity() {
 
         }
         binding.btnCancelPost.setOnClickListener{
+            startActivity(Intent(this,MainActivity::class.java))
             finish()
 
         }
