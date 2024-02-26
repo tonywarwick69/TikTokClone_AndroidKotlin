@@ -44,7 +44,9 @@ class MainActivity : AppCompatActivity()  {
                     finish()
                 }
                 R.id.bottom_menu_profile->{
-                    startActivity(Intent(this,ProfileActivity::class.java))
+                    val intent = Intent(this,ProfileActivity::class.java)
+                    intent.putExtra("profile_user_id",FirebaseAuth.getInstance().currentUser?.uid)
+                    startActivity(intent)
                     finish()
                 }
             }
