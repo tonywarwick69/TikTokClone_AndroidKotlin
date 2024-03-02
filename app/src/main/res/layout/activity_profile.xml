@@ -43,7 +43,7 @@
           android:textSize="14sp"
           android:layout_margin="4dp"
           tools:text="Logout"
-          android:id="@+id/btn_logOut"/>
+          android:id="@+id/btn_profile"/>
       <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

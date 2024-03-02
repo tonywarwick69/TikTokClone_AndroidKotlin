@@ -54,9 +54,9 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         if(profileUserID == currentUserID){
-            binding.btnLogOut.visibility = View.VISIBLE
-            binding.btnLogOut.text= "Logout"
-            binding.btnLogOut.setOnClickListener {
+//            binding.btnProfile.visibility = View.VISIBLE
+            binding.btnProfile.text= "Logout"
+            binding.btnProfile.setOnClickListener {
                 logOut()
             }
             binding.profilePic.setOnClickListener{
@@ -64,7 +64,11 @@ class ProfileActivity : AppCompatActivity() {
             }
         } else {
             //other user profile
-            binding.btnLogOut.visibility = View.INVISIBLE
+//            binding.btnProfile.visibility = View.INVISIBLE
+            binding.btnProfile.text = "Follow"
+            binding.btnProfile.setOnClickListener {
+                followUnfollowUser()
+            }
         }
         getUserProfile()
 
@@ -88,6 +92,47 @@ class ProfileActivity : AppCompatActivity() {
             }
             false
         }
+
+    }
+    /*
+    var followerList those whose are following you are followers
+    so when a usr press Follow another user on TikTok app it will that userId to followerList
+    and since this user already in the list now btnProfile will change to unfollow mean to delete that userId from followerList
+
+    var followingList those whose you are following are followings
+
+     */
+    fun followUnfollowUser(){
+        Firebase.firestore.collection("users")
+            .document(currentUserID)
+            .get()
+            .addOnSuccessListener {
+                val currentUserModel = it.toObject(UserModel::class.java)!!
+                if(profileUserModel.followerList.contains(currentUserID)){
+                    //unfollow user
+                    profileUserModel.followerList.remove(currentUserID)
+                    currentUserModel.followingList.remove(profileUserID)
+                    binding.btnProfile.text="Follow"
+                } else {
+                    //follow user
+                    profileUserModel.followerList.add(currentUserID)
+                    currentUserModel.followingList.add(profileUserID)
+                    binding.btnProfile.text="Unfollow"
+                }
+                //Update both the user that you just following and your following list
+                updateUserData(profileUserModel)
+                updateUserData(currentUserModel)
+                //setUI()
+
+            }
+    }
+    fun updateUserData(model: UserModel){
+        Firebase.firestore.collection("users")
+            .document(model.userId)
+            .set(model)
+            .addOnSuccessListener {
+                getUserProfile()
+            }
 
     }
     fun uploadPhotoToFirestore(photoURI: Uri){
@@ -159,8 +204,11 @@ class ProfileActivity : AppCompatActivity() {
                 .circleCrop()
                 .into(binding.profilePic)
             binding.txtProfileUsername.text="@"+username
+            if(profileUserModel.followerList.contains(currentUserID))
+                binding.btnProfile.text="Unfollow"
+
             binding.progressBar.visibility= View.INVISIBLE
-            binding.txtFollowings.text = followingList.toString()
+            binding.txtFollowings.text = followingList.size.toString()
             binding.txtFollowers.text = followerList.size.toString()
             Firebase.firestore.collection("videos")
                 .whereEqualTo("uploaderID",profileUserID)
