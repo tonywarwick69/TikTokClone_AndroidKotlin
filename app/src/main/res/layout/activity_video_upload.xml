@@ -76,6 +76,13 @@
           android:layout_below="@+id/add_icon"
           android:gravity="center"
           android:text="Click to Upload Video"/>
+      <com.google.android.material.bottomnavigation.BottomNavigationView
+          android:layout_width="match_parent"
+          android:layout_height="62dp"
+          android:layout_alignParentBottom="true"
+          app:menu="@menu/bottom_nav_menu"
+          android:id="@+id/bottom_nav_menu"
+          />
   </RelativeLayout>
 
 

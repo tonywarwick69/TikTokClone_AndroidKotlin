@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        android:id="@+id/profile_link">
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"

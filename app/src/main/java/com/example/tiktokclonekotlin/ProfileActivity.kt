@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.tiktokclonekotlin.databinding.ActivityProfileBinding
 import com.example.tiktokclonekotlin.model.UserModel
+import com.example.tiktokclonekotlin.util.ToastResponseMessage
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -53,6 +54,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         if(profileUserID == currentUserID){
+            binding.btnLogOut.visibility = View.VISIBLE
             binding.btnLogOut.text= "Logout"
             binding.btnLogOut.setOnClickListener {
                 logOut()
@@ -62,9 +64,30 @@ class ProfileActivity : AppCompatActivity() {
             }
         } else {
             //other user profile
+            binding.btnLogOut.visibility = View.INVISIBLE
         }
         getUserProfile()
 
+        //Nav Menu
+        binding.bottomNavMenu.setOnItemReselectedListener{menuItem ->
+            when(menuItem.itemId){
+                R.id.bottom_menu_home->{
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+                R.id.bottom_menu_addVideo->{
+                    startActivity(Intent(this,VideoUploadActivity::class.java))
+                    finish()
+                }
+                R.id.bottom_menu_profile->{
+                    val intent = Intent(this,ProfileActivity::class.java)
+                    intent.putExtra("profile_user_id",FirebaseAuth.getInstance().currentUser?.uid)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            false
+        }
 
     }
     fun uploadPhotoToFirestore(photoURI: Uri){

@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity()  {
         binding.bottomNavMenu.setOnItemReselectedListener{menuItem ->
             when(menuItem.itemId){
                 R.id.bottom_menu_home->{
-                    ToastResponseMessage.showToast(this,"HOME")
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 }
                 R.id.bottom_menu_addVideo->{
                     startActivity(Intent(this,VideoUploadActivity::class.java))
