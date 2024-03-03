@@ -17,14 +17,19 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.tiktokclonekotlin.adapter.ProfileVideoAdapter
 import com.example.tiktokclonekotlin.databinding.ActivityProfileBinding
 import com.example.tiktokclonekotlin.model.UserModel
+import com.example.tiktokclonekotlin.model.VideoModel
 import com.example.tiktokclonekotlin.util.ToastResponseMessage
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.storage.FirebaseStorage
@@ -37,6 +42,7 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var currentUserID : String
     lateinit var profileUserModel: UserModel
     lateinit var photoLauncher : ActivityResultLauncher<Intent>
+    lateinit var adapter: ProfileVideoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +77,8 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
         getUserProfile()
+        //RecyclerView is view of a vertical list that you scroll them from top to bottom and from bottom back to top
+        setupRecyclerView()
 
         //Nav Menu
         binding.bottomNavMenu.setOnItemReselectedListener{menuItem ->
@@ -93,6 +101,30 @@ class ProfileActivity : AppCompatActivity() {
             false
         }
 
+
+    }
+
+    private fun setupRecyclerView() {
+        val options = FirestoreRecyclerOptions.Builder<VideoModel>()
+            .setQuery(
+                Firebase.firestore.collection("videos")
+                    .whereEqualTo("uploaderID",profileUserID)
+                    .orderBy("createdTime",Query.Direction.DESCENDING),
+                VideoModel::class.java
+            ).build()
+        adapter = ProfileVideoAdapter(options)
+        binding.recyclerView.layoutManager = GridLayoutManager(this,3)
+        binding.recyclerView.adapter = adapter
+    }
+    //Listener
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
     }
     /*
     var followerList those whose are following you are followers
